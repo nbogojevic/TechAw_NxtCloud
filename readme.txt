@@ -1,1 +1,1 @@
-﻿This project contains code example for TechAwarness concerning LEGO Mindstorms NXT.
+﻿This project contains code example for TechAwareness concerning LEGO Mindstorms NXT.
