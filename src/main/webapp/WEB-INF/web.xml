@@ -1,6 +1,40 @@
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-      version="3.0"> 
-       
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+	version="2.5">
+	<servlet>
+		<servlet-name>Vote</servlet-name>
+		<servlet-class>nb.driverobot.VoteServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Winner</servlet-name>
+		<servlet-class>nb.driverobot.GetWinnerServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Tally</servlet-name>
+		<servlet-class>nb.driverobot.TallyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Vote</servlet-name>
+		<url-pattern>/vote</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Winner</servlet-name>
+		<url-pattern>/winner</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Tally</servlet-name>
+		<url-pattern>/tally</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	<context-param>
+		<description>This context parameter identifies class that implements Ballot contract</description>
+		<param-name>ballot-implementation</param-name>
+		<param-value>nb.ballot.sql.SQLBallot</param-value>
+	</context-param>
 </web-app>

@@ -6,4 +6,28 @@
 	<description>This is demo webapp used to show "crowd" controlling of LEGO Mindostorms robot.</description>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+	</dependencies>
+	<scm>
+		<url>https://nbogojevic@github.com/nbogojevic/TechAw_Sledeci.git</url>
+	</scm>
+	<build>
+		<finalName>crowd-control</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
