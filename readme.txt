@@ -1,0 +1,1 @@
+﻿This project contains code example for TechAwarness concerning LEGO Mindstorms NXT.
