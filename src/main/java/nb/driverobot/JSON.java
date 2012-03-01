@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JSON {
   private final StringBuffer buf = new StringBuffer();
-  private boolean first = false;
+  private boolean first = true;
   
   public JSON() {
     buf.append('{');
