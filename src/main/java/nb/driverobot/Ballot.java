@@ -53,6 +53,7 @@ public abstract class Ballot {
   }
 
   private void init() {
+    iteration++;
     for (String choice : choices) {
       Counter<String> counter = counters.get(choice);
       if (counter != null && counter.isNeedingCleanup()) {
@@ -61,7 +62,6 @@ public abstract class Ballot {
       counter = initCounter(choice);
       counters.put(choice, counter);
     }
-    iteration++;
   }
 
   protected final int getIteration() {

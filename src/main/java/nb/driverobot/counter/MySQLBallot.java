@@ -1,33 +1,36 @@
 package nb.driverobot.counter;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 
 import nb.driverobot.Ballot;
 import nb.driverobot.Counter;
 
 public class MySQLBallot extends Ballot {
-  private DataSource dataSource;
-
   public MySQLBallot(String...choices) {
     super(choices);
-    try {
-      Context ctx = new InitialContext();
-      this.dataSource = (DataSource)ctx.lookup("java:comp/env/jdbc/TestDB");
-    } catch (Exception e) {
-      throw new IllegalStateException("Unable to access datasource.", e);
-    }
   }
 
   @Override
   protected Counter<String> initCounter(String choice) {
     return new SQLCounter(choice);
   }
+
+  private Connection createConnection() {
+    Connection connection = null;
+    try {
+        // Load the JDBC driver
+        Class.forName("com.mysql.jdbc.Driver");
+        // Create a connection to the database
+        connection = DriverManager.getConnection("jdbc:mysql://http://mariadb-1ajelastic.jelastic.com/jelasticDb", "jelastic", "password");
+    } catch (Exception ex) {
+        throw new IllegalStateException("Unable to get connection to database", ex);
+    }
+    return connection;
+}
+
 
   private class SQLCounter implements Counter<String> {
 
@@ -46,7 +49,7 @@ public class MySQLBallot extends Ballot {
 
     private ResultSet executeSQLQuery(String statement, String...args) {
       try {
-        Connection conn = dataSource.getConnection();
+        Connection conn = createConnection();
         try {
           PreparedStatement stmt = conn.prepareStatement(statement);
           try {
