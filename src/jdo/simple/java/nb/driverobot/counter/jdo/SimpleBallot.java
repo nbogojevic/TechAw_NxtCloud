@@ -1,4 +1,4 @@
-package nb.driverobot.counter;
+package nb.driverobot.counter.jdo;
 
 import nb.driverobot.Ballot;
 import nb.driverobot.Counter;

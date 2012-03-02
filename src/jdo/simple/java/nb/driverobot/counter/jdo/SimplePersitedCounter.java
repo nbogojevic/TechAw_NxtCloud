@@ -1,4 +1,4 @@
-package nb.driverobot.counter;
+package nb.driverobot.counter.jdo;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import nb.driverobot.Counter;
-import nb.driverobot.counter.sharded.PMF;
+import nb.driverobot.PMF;
 
 public class SimplePersitedCounter implements Counter<String> {
   private String counterName;
@@ -61,6 +61,15 @@ public class SimplePersitedCounter implements Counter<String> {
     }
 
     return current;
-    
+
+  }
+
+  @Override
+  public boolean isNeedingCleanup() {
+    return false;
+  }
+
+  @Override
+  public void cleanup() {
   }
 }

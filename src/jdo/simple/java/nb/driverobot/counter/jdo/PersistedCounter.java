@@ -1,4 +1,4 @@
-package nb.driverobot.counter;
+package nb.driverobot.counter.jdo;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;

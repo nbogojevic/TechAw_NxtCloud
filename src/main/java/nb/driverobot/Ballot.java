@@ -1,14 +1,12 @@
 package nb.driverobot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Ballot {
   private final HashMap<String, Counter<String>> counters = new HashMap<String, Counter<String>>();
-  private final ArrayList<Counter<String>> oldCounters = new ArrayList<Counter<String>>();
   private final String[] choices;
   private int iteration;
-  
+
   public Ballot(String...choices) {
     this.choices = choices;
     init();
@@ -30,7 +28,7 @@ public abstract class Ballot {
       return leader;
     }
   }
-  
+
   public final String getLeader() {
     int maxCount = -1;
     String leader = null;
@@ -53,12 +51,12 @@ public abstract class Ballot {
     }
     return 0;
   }
-  
+
   private void init() {
     for (String choice : choices) {
       Counter<String> counter = counters.get(choice);
-      if (counter != null) {
-        oldCounters.add(counter);
+      if (counter != null && counter.isNeedingCleanup()) {
+        counter.cleanup();
       }
       counter = initCounter(choice);
       counters.put(choice, counter);
@@ -69,7 +67,7 @@ public abstract class Ballot {
   protected final int getIteration() {
     return iteration;
   }
-  
+
   protected abstract Counter<String> initCounter(String choice);
 
 }

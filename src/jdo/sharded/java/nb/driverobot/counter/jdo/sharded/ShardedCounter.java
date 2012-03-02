@@ -1,4 +1,4 @@
-package nb.driverobot.counter.sharded;
+package nb.driverobot.counter.jdo.sharded;
 
 import java.util.List;
 import java.util.Random;
@@ -6,6 +6,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import nb.driverobot.Counter;
+import nb.driverobot.PMF;
 
 /**
  * A counter which can be incremented rapidly.
@@ -45,8 +46,7 @@ public class ShardedCounter<T> implements Counter<T> {
     PersistenceManager pm = PMF.get().getPersistenceManager();
 
     try {
-      Query shardsQuery =
-          pm.newQuery(GeneralCounterShard.class, "counterName == nameParam");
+      Query shardsQuery = pm.newQuery(GeneralCounterShard.class, "counterName == nameParam");
       shardsQuery.declareParameters("String nameParam");
 
       @SuppressWarnings("unchecked")
@@ -87,8 +87,7 @@ public class ShardedCounter<T> implements Counter<T> {
     pm = PMF.get().getPersistenceManager();
     try {
       Query randomShardQuery = pm.newQuery(GeneralCounterShard.class);
-      randomShardQuery.setFilter(
-          "counterName == nameParam && shardNumber == numParam");
+      randomShardQuery.setFilter("counterName == nameParam && shardNumber == numParam");
       randomShardQuery.declareParameters("String nameParam, int numParam");
 
       @SuppressWarnings("unchecked")
@@ -153,8 +152,7 @@ public class ShardedCounter<T> implements Counter<T> {
   private CounterDescriptor getThisCounter(PersistenceManager pm) {
     CounterDescriptor current = null;
 
-    Query thisCounterQuery =
-        pm.newQuery(CounterDescriptor.class, "counterName == nameParam");
+    Query thisCounterQuery = pm.newQuery(CounterDescriptor.class, "counterName == nameParam");
     thisCounterQuery.declareParameters("String nameParam");
 
     @SuppressWarnings("unchecked")
@@ -165,5 +163,40 @@ public class ShardedCounter<T> implements Counter<T> {
     }
 
     return current;
+  }
+
+  @Override
+  public boolean isNeedingCleanup() {
+    return true;
+  }
+
+  @Override
+  public void cleanup() {
+    PersistenceManager pm = PMF.get().getPersistenceManager();
+
+    try {
+      CounterDescriptor current = getThisCounter(pm);
+      pm.deletePersistent(current);
+    } finally {
+      pm.close();
+    }
+
+    pm = PMF.get().getPersistenceManager();
+    try {
+      Query randomShardQuery = pm.newQuery(GeneralCounterShard.class);
+      randomShardQuery.setFilter("counterName == nameParam");
+      randomShardQuery.declareParameters("String nameParam");
+
+      @SuppressWarnings("unchecked")
+      List<GeneralCounterShard> shards = (List<GeneralCounterShard>)
+          randomShardQuery.execute(counterName);
+      if (shards != null) {
+        for (GeneralCounterShard shard : shards) {
+          pm.deletePersistent(shard);
+        }
+      }
+    } finally {
+      pm.close();
+    }
   }
 }

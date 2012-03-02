@@ -1,4 +1,4 @@
-package nb.driverobot.counter.sharded;
+package nb.driverobot.counter.jdo.sharded;
 
 import nb.driverobot.Ballot;
 import nb.driverobot.Counter;

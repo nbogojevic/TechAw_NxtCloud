@@ -1,4 +1,4 @@
-package nb.driverobot.counter.sharded;
+package nb.driverobot.counter.jdo.sharded;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;

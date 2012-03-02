@@ -1,4 +1,4 @@
-package nb.driverobot.counter.sharded;
+package nb.driverobot;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
