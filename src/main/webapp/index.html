@@ -1,25 +1,142 @@
-<!DOCTYPE html> 
-<html> 
-	<head> 
-	<title>My Page</title> 
+<!DOCTYPE html>
+<html>
+<head> 
+	<title>NXT Driver</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-</head> 
-<body> 
+	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
 
-<div data-role="page">
+<script type="text/javascript">
+var I18N = {
+	strings : [],
+	
+	handle : function (el, textElement) {
+		if (!textElement) {
+			textElement = function(item) { return item; };
+		}
+ 		var trans = I18N.strings[el.id];
+		if (trans) {
+			textElement(el).text(trans)
+		}
+	}
+};
+
+$(window).ready(function () {
+	$('h1.nb-i18n').each(function(index, el) { I18N.handle(el) });
+	$('a.nb-i18n').each(function(index, el) {
+		I18N.handle(el, 
+				function(item) { 
+					return $("#" + item.id + " .ui-btn-text"); 
+				} ); 
+	});
+});
+function showResult(direction, data) {
+	if (data["isLeader"] == "false") {
+		$.mobile.changePage($("#notleading"), { transition: "pop", role: "dialog"});
+	}
+	else {
+		$.mobile.changePage($("#goingWithTheCrowd"), { transition: "pop", role: "dialog"});		
+	}
+}
+function vote(direction) {
+	$("#status").text("");
+	$.getJSON("vote",
+			{vote:$(direction).attr("data-robot-command")},
+			function(data) {
+				showResult(direction, data);
+			}
+			)
+	.error(function(data, status, err) { $("#status").text(status+": " + err); });
+}
+
+</script>
+</head>
+<body>
+<div data-role="page" id="vote">
 
 	<div data-role="header">
-		<h1>My Title</h1>
-	</div><!-- /header -->
+		<h1 class="nb-i18n">NXT Driver</h1>
+	</div>
 
 	<div data-role="content">	
-		<p>Hello world</p>		
+		<div class="ui-grid-b">
+			<div class="ui-block-a">
+			</div>
+			<div class="ui-block-b">
+				<a class="nb-i18n" id="btn-forward" data-robot-command="forward" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="arrow-u">FORWARD</a>
+			</div>
+			<div class="ui-block-c">
+			</div>
+		</div>
+		<div class="ui-grid-b">
+			<div class="ui-block-a">
+				<a class="nb-i18n" id="btn-left" data-robot-command="left" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="arrow-l">LEFT</a>
+			</div>
+			<div class="ui-block-b">
+				<a class="nb-i18n" id="btn-stop" data-robot-command="stop" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="delete">STOP</a>
+			</div>
+			<div class="ui-block-c">
+				<a class="nb-i18n" id="btn-right" data-robot-command="right" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="arrow-r">RIGHT</a>
+			</div>
+		</div>
+		<div class="ui-grid-b">
+			<div class="ui-block-a">
+			</div>
+			<div class="ui-block-b">
+				<a class="nb-i18n" id="btn-reverse" data-robot-command="reverse" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="arrow-d">REVERSE</a>
+			</div>
+			<div class="ui-block-c">
+			</div>
+		</div>
+		
+		<div class="ui-grid-b">
+			<div class="ui-block-a">
+			</div>
+			<div class="ui-block-b">
+				<a class="nb-i18n" id="btn-grab" data-robot-command="grab" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="plus">GRAB</a>
+			</div>
+			<div class="ui-block-c">
+			</div>
+		</div>
+		<div class="ui-grid-b">
+			<div class="ui-block-a">
+			</div>
+			<div class="ui-block-b">
+				<a class="nb-i18n" id="btn-drop" data-robot-command="drop" onclick="vote(this);" data-role="button" data-iconpos="top" data-icon="minus">DROP</a>
+			</div>
+			<div class="ui-block-c">
+			</div>
+		</div>
+		<div><span id="status"></span></div>
+	</div>
+</div> 
+<div data-role="page" id="notleading">
+
+	<div data-role="header">
+		<h1>Minority</h1>
+	</div>
+
+	<div data-role="content">	
+		<p>Your choice is not leading at this time. You may vote again to increase its chances of winning or you 
+		may vote for another option.</p>		
+		<p><a data-role="button" href="#vote">Back to voting</a></p>	
 	</div><!-- /content -->
 
-</div><!-- /page -->
+</div>
+<div data-role="page" id="goingWithTheCrowd">
+
+	<div data-role="header">
+		<h1>Leading</h1>
+	</div>
+
+	<div data-role="content">	
+		<p>Your choice has the current plurality, but that can change before the robot moves. You may vote again to increase it's chances of winning or you
+		may vote for another option.</p>		
+		<p><a data-role="button" href="#vote">Back to voting</a></p>	
+	</div><!-- /content -->
+
+</div>
 
 </body>
 </html>

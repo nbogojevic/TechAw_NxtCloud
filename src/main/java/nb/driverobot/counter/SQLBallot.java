@@ -16,13 +16,13 @@ public class SQLBallot extends Ballot {
   private DataSource dataSource;
 
   public SQLBallot(String...choices) {
-    super(choices);
-    try {
-      Context ctx = new InitialContext();
-      this.dataSource = (DataSource)ctx.lookup("java:comp/env/jdbc/TestDB");  
-    } catch (Exception e) {
-      throw new IllegalStateException("Unable to access datasource.", e);
-    }
+//    super(choices);
+//    try {
+//      Context ctx = new InitialContext();
+//      this.dataSource = (DataSource)ctx.lookup("java:comp/env/jdbc/TestDB");  
+//    } catch (Exception e) {
+//      throw new IllegalStateException("Unable to access datasource.", e);
+//    }
   }
 
   @Override
