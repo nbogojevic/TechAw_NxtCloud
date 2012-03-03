@@ -38,6 +38,6 @@
 	<context-param>
 		<description>This context parameter identifies class that implements Ballot contract</description>
 		<param-name>ballot-implementation</param-name>
-		<param-value>nb.ballot.counter.SimpleBallot</param-value>
+		<param-value>nb.ballot.counter.MySQLBallot</param-value>
 	</context-param>
 </web-app>

@@ -9,7 +9,6 @@ public class ShardedCounterBallot extends Ballot {
   }
   protected Counter<String> initCounter(String choice) {
     ShardedCounter<String> counter = new ShardedCounter<String>(choice + getIteration(), choice);
-    counter.addShards(20);
     return counter;
   }
 

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class VoteServlet extends HttpServlet {
-  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String input = req.getParameter("vote");
     Ballot ballot = BallotContainer.get(getServletContext());
     try {

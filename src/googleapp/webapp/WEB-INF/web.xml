@@ -37,6 +37,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<context-param>
 		<description>This context parameter identifies class that implements Ballot contract</description>
 		<param-name>ballot-implementation</param-name>
-		<param-value>nb.driverobot.counter.sharded.ShardedCounterBallot</param-value>
+		<param-value>nb.driverobot.counter.jdo.sharded.ShardedCounterBallot</param-value>
 	</context-param>
 </web-app>

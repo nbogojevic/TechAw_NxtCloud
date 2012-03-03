@@ -54,14 +54,21 @@ public abstract class Ballot {
 
   private void init() {
     iteration++;
+    cleanup();
+    for (String choice : choices) {
+      Counter<String> counter = initCounter(choice);
+      counters.put(choice, counter);
+    }
+  }
+  
+  public final void cleanup() {
     for (String choice : choices) {
       Counter<String> counter = counters.get(choice);
       if (counter != null && counter.isNeedingCleanup()) {
         counter.cleanup();
       }
-      counter = initCounter(choice);
-      counters.put(choice, counter);
     }
+    
   }
 
   protected final int getIteration() {

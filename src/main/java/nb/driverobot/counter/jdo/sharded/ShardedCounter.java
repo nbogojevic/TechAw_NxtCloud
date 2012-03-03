@@ -24,6 +24,7 @@ public class ShardedCounter<T> implements Counter<T> {
   public ShardedCounter(String counterName, T counterTag) {
     this.counterName = counterName;
     this.counterTag = counterTag;
+    addShards(20, 20);
   }
 
   public String getCounterName() {
@@ -104,13 +105,13 @@ public class ShardedCounter<T> implements Counter<T> {
   }
 
   /**
-   * Increase the number of shards for a given sharded counter.
+   * Increase the number of shards for a given sharded counter, but never adds more than maxshards
    * Will never decrease the number of shards.
    *
    * @param  count Number of new shards to build and store
    * @return Total number of shards
    */
-  public int addShards(int count) {
+  public int addShards(int count, int maxShards) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
 
     // Find the initial shard count for this counter.
@@ -123,7 +124,8 @@ public class ShardedCounter<T> implements Counter<T> {
       else {
         current = new CounterDescriptor(getCounterName());
       }
-      current.setShardCount(numShards + count);
+      int shardCount = numShards + count;
+      current.setShardCount(shardCount <= maxShards ? shardCount : maxShards);
       // Save the increased shard count for this counter.
       pm.makePersistent(current);
     } finally {

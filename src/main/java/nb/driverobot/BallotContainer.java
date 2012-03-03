@@ -10,10 +10,11 @@ public class BallotContainer implements ServletContextListener {
 
   private static final String BALLOT_IMPLEMENTATION_INIT_PARAM = "ballot-implementation";
   private static final String BALLOT_CTX_KEY = "ballot";
-  private static final String[] BALLOT = {"left", "right", "forward", "reverse", "stop", "grap", "drop"};
+  private static final String[] BALLOT = {"left", "right", "forward", "reverse", "stop", "grab", "drop"};
 
   @Override
   public void contextDestroyed(ServletContextEvent event) {
+    get(event.getServletContext()).cleanup();
   }
 
   @Override
