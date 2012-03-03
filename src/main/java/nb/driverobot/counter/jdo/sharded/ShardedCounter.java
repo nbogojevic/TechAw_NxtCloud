@@ -24,7 +24,7 @@ public class ShardedCounter<T> implements Counter<T> {
   public ShardedCounter(String counterName, T counterTag) {
     this.counterName = counterName;
     this.counterTag = counterTag;
-    addShards(20, 20);
+    addShards(5, 10);
   }
 
   public String getCounterName() {
