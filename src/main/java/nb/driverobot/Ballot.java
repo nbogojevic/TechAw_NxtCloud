@@ -38,8 +38,11 @@ public abstract class Ballot {
         maxCount = currentCounter;
         leader = counter.getCounterTag();
       }
+      else if (currentCounter == maxCount) {
+        leader = leader + ";" + counter.getCounterTag();
+      }
     }
-    return leader;
+    return maxCount > 0 ? leader : "none";
   }
   public final String[] getChoices() {
     return choices;
