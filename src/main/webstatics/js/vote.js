@@ -1,5 +1,4 @@
 function showResult(direction, data) {
-	alert(data);
 	if (data["isLeader"] == "false") {
 		$.mobile.changePage($("#notleading"), { role: "dialog"});
 	}
