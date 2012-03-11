@@ -30,4 +30,8 @@ public class PersistedCounter {
   public void increment() {
     count++;
   }
+
+  public void reset() {
+    count = 0;
+  }
 }

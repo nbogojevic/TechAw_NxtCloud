@@ -46,5 +46,9 @@ public class GeneralCounterShard {
   public int getShardNumber() {
     return shardNumber;
   }
+
+  public void reset() {
+    count = 0;
+  }
 }
       

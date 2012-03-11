@@ -17,9 +17,6 @@ public class VoteServlet extends HttpServlet {
       resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;      
     }
-    String leader = ballot.getLeader();
-    boolean isLeader = leader != null && leader.equals(input);
-    
-    new JSON().append("isLeader", isLeader).marshall(resp);
+    new JSON().marshall(resp);
   }
 }

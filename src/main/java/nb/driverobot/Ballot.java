@@ -3,9 +3,8 @@ package nb.driverobot;
 import java.util.HashMap;
 
 public abstract class Ballot {
-  private final HashMap<String, Counter<String>> counters = new HashMap<String, Counter<String>>();
+  private HashMap<String, Counter> counters = new HashMap<String, Counter>();
   private final String[] choices;
-  private int iteration;
 
   public Ballot(String...choices) {
     this.choices = choices;
@@ -13,7 +12,7 @@ public abstract class Ballot {
   }
 
   public final void vote(String option) {
-    Counter<String> counter = counters.get(option);
+    Counter counter = counters.get(option);
     if (counter != null) {
       counter.increment();
     } else {
@@ -21,25 +20,17 @@ public abstract class Ballot {
     }
   }
 
-  public final String getWinner() {
-    synchronized (this) {
-      String leader = getLeader();
-      init();
-      return leader;
-    }
-  }
-
-  public final String getLeader() {
+  public String getWinner() {
     int maxCount = -1;
     String leader = null;
-    for (Counter<String> counter : counters.values()) {
-      int currentCounter = counter.getCount();
+    for (Counter counter : counters.values()) {
+      int currentCounter = counter.getCountAndClean();
       if (currentCounter > maxCount) {
         maxCount = currentCounter;
-        leader = counter.getCounterTag();
+        leader = counter.getCounterName();
       }
       else if (currentCounter == maxCount) {
-        leader = leader + ";" + counter.getCounterTag();
+        leader = leader + ";" + counter.getCounterName();
       }
     }
     return maxCount > 0 ? leader : "none";
@@ -48,7 +39,7 @@ public abstract class Ballot {
     return choices;
   }
   public int getVotesForChoice(String choice) {
-    Counter<String> counter = counters.get(choice);
+    Counter counter = counters.get(choice);
     if (counter != null) {
       return counter.getCount();
     }
@@ -56,17 +47,17 @@ public abstract class Ballot {
   }
 
   private void init() {
-    iteration++;
-    cleanup();
+    HashMap<String, Counter> newCounters = new HashMap<String, Counter>();
     for (String choice : choices) {
-      Counter<String> counter = initCounter(choice);
-      counters.put(choice, counter);
+      Counter counter = initCounter(choice);
+      newCounters.put(choice, counter);
     }
+    counters = newCounters;
   }
   
   public final void cleanup() {
     for (String choice : choices) {
-      Counter<String> counter = counters.get(choice);
+      Counter counter = counters.get(choice);
       if (counter != null && counter.isNeedingCleanup()) {
         counter.cleanup();
       }
@@ -74,10 +65,6 @@ public abstract class Ballot {
     
   }
 
-  protected final int getIteration() {
-    return iteration;
-  }
-
-  protected abstract Counter<String> initCounter(String choice);
+  protected abstract Counter initCounter(String choice);
 
 }

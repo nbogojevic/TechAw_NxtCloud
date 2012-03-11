@@ -8,7 +8,7 @@ public class SimpleBallot extends Ballot {
     super(choices);
   }
   @Override
-  protected Counter<String> initCounter(String choice) {
+  protected Counter initCounter(String choice) {
     SimplePersitedCounter counter = new SimplePersitedCounter(choice);
     return counter;
   }

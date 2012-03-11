@@ -14,7 +14,7 @@ public class MySQLBallot extends Ballot {
   }
 
   @Override
-  protected Counter<String> initCounter(String choice) {
+  protected Counter initCounter(String choice) {
     return new SQLCounter(choice);
   }
 
@@ -32,7 +32,7 @@ public class MySQLBallot extends Ballot {
 }
 
 
-  private class SQLCounter implements Counter<String> {
+  private class SQLCounter implements Counter {
 
     private String counterName;
 
@@ -89,17 +89,24 @@ public class MySQLBallot extends Ballot {
     }
 
     @Override
-    public String getCounterTag() {
-      return counterName;
-    }
-
-    @Override
     public boolean isNeedingCleanup() {
       return false;
     }
 
     @Override
     public void cleanup() {
+    }
+
+    @Override
+    public String getCounterName() {
+      return counterName;
+    }
+
+    @Override
+    public int getCountAndClean() {
+      int count = getCount();
+      executeSQLQuery("UPDATE count SET counter = 0 WHERE counterName = ?", counterName);
+      return count;
     }
   }
 

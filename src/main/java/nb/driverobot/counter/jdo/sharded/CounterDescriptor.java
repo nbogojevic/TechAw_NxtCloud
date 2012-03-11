@@ -16,7 +16,7 @@ public class CounterDescriptor {
   private String counterName;
   
   @Persistent
-  private Integer shardCount;
+  private int shardCount;
 
   public CounterDescriptor(String counterName) {
     this.counterName = counterName;
@@ -30,7 +30,7 @@ public class CounterDescriptor {
     return counterName;
   }
 
-  public Integer getShardCount() {
+  public int getShardCount() {
     return shardCount;
   }
 

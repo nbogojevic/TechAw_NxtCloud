@@ -8,7 +8,7 @@ import javax.jdo.Query;
 import nb.driverobot.Counter;
 import nb.driverobot.PMF;
 
-public class SimplePersitedCounter implements Counter<String> {
+public class SimplePersitedCounter implements Counter {
   private String counterName;
 
   public SimplePersitedCounter(String counterName) {
@@ -35,11 +35,6 @@ public class SimplePersitedCounter implements Counter<String> {
     } finally {
       pm.close();
     }
-  }
-
-  @Override
-  public String getCounterTag() {
-    return counterName;
   }
 
   private PersistedCounter getCounterInstance(PersistenceManager pm) {
@@ -72,4 +67,24 @@ public class SimplePersitedCounter implements Counter<String> {
   @Override
   public void cleanup() {
   }
+
+  @Override
+  public String getCounterName() {
+    return counterName;
+  }
+
+  @Override
+  public int getCountAndClean() {
+    PersistenceManager pm = PMF.get().getPersistenceManager();
+    try {
+      PersistedCounter counterInstance = getCounterInstance(pm);
+      int count = counterInstance.getCount();
+      counterInstance.reset();
+      pm.makePersistent(counterInstance);
+      return count;
+    } finally {
+      pm.close();
+    }
+  }
+
 }

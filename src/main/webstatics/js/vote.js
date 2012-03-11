@@ -1,10 +1,5 @@
 function showResult(direction, data) {
-	if (data["isLeader"] == "false") {
-		$.mobile.changePage($("#notleading"), { role: "dialog"});
-	}
-	else {
-		$.mobile.changePage($("#goingWithTheCrowd"), { role: "dialog"});		
-	}
+	$.mobile.changePage($("#voted"), { role: "dialog"});
 }
 function vote(direction) {
 	$("#status").text("");
